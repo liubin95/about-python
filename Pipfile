@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 jupyter = "*"
+black = {extras = ["jupyter"], version = "*"}
 
 [dev-packages]
 
