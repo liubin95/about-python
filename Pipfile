@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 jupyter = "*"
-black = {extras = ["jupyter"], version = "*"}
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.9"
