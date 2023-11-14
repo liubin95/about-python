@@ -8,6 +8,8 @@ jupyter = "*"
 
 [dev-packages]
 black = "*"
+flake8 = "*"
+pycodestyle-magic = "*"
 
 [requires]
 python_version = "3.9"
