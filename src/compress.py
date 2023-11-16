@@ -1,5 +1,5 @@
 """
-该脚本将搜索给*.log定目录中的所有文件，使用您指定的程序压缩它们，然后给它们加上日期标记。
+该脚本将搜索给*.suffix定目录中的所有文件，使用您指定的程序压缩它们.
 """
 
 import argparse
@@ -26,6 +26,7 @@ parser.add_argument(
 parser.add_argument(
     "-s",
     "--suffix",
+    help="the suffix of the file",
     default="log",
 )
 args = parser.parse_args()
@@ -35,11 +36,14 @@ path = args.path
 compress_name = str(Path(path) / suffix)
 compress = args.compress
 
+# 创建临时目录
 with tempfile.TemporaryDirectory() as tmpdir:
     pprint(tmpdir)
+    # 移动文件
     for f in Path(path).rglob(f"*.{suffix}"):
         pprint(f)
         shutil.move(f, f"{tmpdir}/{f.name}")
+    # 压缩文件
     if compress == "gzip":
         shutil.make_archive(compress_name, "gztar", root_dir=tmpdir)
     elif compress == "bzip2":
