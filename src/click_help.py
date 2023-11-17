@@ -14,11 +14,13 @@ Click 是一个 Python 包，用于以可组合的方式使用尽可能少的代
 """
 import shutil
 from pathlib import Path
+from pprint import pprint
 
 import click
 
 
 def validate_path(ctx, param, value):
+    pprint(f"{ctx!r}")
     if not Path(value).exists():
         raise click.BadParameter("path not exists")
 
@@ -54,14 +56,14 @@ def find(ctx, files):
     for it in files:
         find_file = path.rglob(it)
         for f in find_file:
-            click.echo(f, color=True)
+            click.secho(f, fg="green")
 
 
 @file.command()
 @click.pass_context
 def ls(ctx):
     path = ctx.obj["path"]
-    for it in Path(path).glob("*"):
+    for it in sorted(Path(path).glob("*"), key=lambda x: x.name.lower()):
         if it.is_file():
             click.secho(it.name, fg="green")
         else:
@@ -72,9 +74,8 @@ def ls(ctx):
 @click.pass_context
 @click.option("-c", "--count", type=int, default=1, help="number of greetings")
 @click.option("-f", "files", multiple=True, required=True, help="file name to deal")
-def copy(ctx, count):
+def copy(ctx, count, files):
     path = Path(ctx.obj["path"])
-    files = ctx.obj["files"]
 
     for it in files:
         find_file = path.rglob(it)
@@ -83,26 +84,25 @@ def copy(ctx, count):
             if click.confirm("Do you want to continue?"):
                 for i in range(count):
                     shutil.copy2(f, f.parent / f"{f.stem}-{i}{f.suffix}")
-                click.echo("Copied")
+                click.secho("Copied", fg="green")
             else:
-                click.echo("Aborted!")
+                click.secho("Aborted!", fg="red")
 
 
 @file.command()
 @click.pass_context
 @click.option("-f", "files", multiple=True, required=True, help="file name to deal")
-def rm(ctx):
+def rm(ctx, files):
     path = Path(ctx.obj["path"])
-    files = ctx.obj["files"]
     for it in files:
         find_file = path.rglob(it)
         for f in find_file:
             click.echo(f)
             if click.confirm("Do you want to continue?"):
                 f.unlink()
-                click.echo("Deleted")
+                click.secho("Deleted", fg="green")
             else:
-                click.echo("Aborted!")
+                click.secho("Aborted!", fg="red")
 
 
 if __name__ == "__main__":
