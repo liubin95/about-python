@@ -14,14 +14,11 @@ Click 是一个 Python 包，用于以可组合的方式使用尽可能少的代
 """
 import shutil
 from pathlib import Path
-from pprint import pprint
 
 import click
 
 
 def validate_path(ctx, param, value):
-    pprint(ctx.command)
-    pprint(param)
     if not Path(value).exists():
         raise click.BadParameter("path not exists")
 
@@ -32,7 +29,6 @@ def validate_path(ctx, param, value):
 
 
 @click.group()
-@click.option("-f", "files", multiple=True, default=[], help="file name to deal")
 @click.option(
     "-p",
     "path",
@@ -42,22 +38,18 @@ def validate_path(ctx, param, value):
     callback=validate_path,
 )
 @click.pass_context
-def file(ctx, files, path):
+def file(ctx, path):
     # ensure that ctx.obj exists and is a dict (in case `cli()` is called
     # by means other than the `if` block below)
     ctx.ensure_object(dict)
-    ctx.obj["files"] = files
     ctx.obj["path"] = path
 
 
 @file.command()
 @click.pass_context
-def find(ctx):
+@click.option("-f", "files", multiple=True, required=True, help="file name to deal")
+def find(ctx, files):
     path = Path(ctx.obj["path"])
-    files = ctx.obj["files"]
-
-    if len(files) == 0:
-        raise click.BadParameter("files is empty")
 
     for it in files:
         find_file = path.rglob(it)
@@ -70,18 +62,19 @@ def find(ctx):
 def ls(ctx):
     path = ctx.obj["path"]
     for it in Path(path).glob("*"):
-        click.echo(it.name)
+        if it.is_file():
+            click.secho(it.name, fg="green")
+        else:
+            click.secho(it.name, fg="blue")
 
 
 @file.command()
-@click.option("-c", "--count", type=int, default=1, help="number of greetings")
 @click.pass_context
+@click.option("-c", "--count", type=int, default=1, help="number of greetings")
+@click.option("-f", "files", multiple=True, required=True, help="file name to deal")
 def copy(ctx, count):
     path = Path(ctx.obj["path"])
     files = ctx.obj["files"]
-
-    if len(files) == 0:
-        raise click.BadParameter("files is empty")
 
     for it in files:
         find_file = path.rglob(it)
@@ -97,6 +90,7 @@ def copy(ctx, count):
 
 @file.command()
 @click.pass_context
+@click.option("-f", "files", multiple=True, required=True, help="file name to deal")
 def rm(ctx):
     path = Path(ctx.obj["path"])
     files = ctx.obj["files"]
