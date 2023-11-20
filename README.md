@@ -68,6 +68,12 @@ pipenv graph
 pipenv requirements --dev --hash > requirements.txt
 ```
 
+### [pyenv](https://github.com/pyenv/pyenv)
+
+> pyenv 可让您轻松地在多个 Python 版本之间切换。
+> 它简单、不引人注目，并且遵循 UNIX 单一用途工具只做好一件事的传统。
+> 该项目是从rbenv和 ruby​​-build分叉出来的，并针对 Python 进行了修改。
+
 ### [pylint](https://pypi.org/project/pylint/)
 
 静态代码检查工具
