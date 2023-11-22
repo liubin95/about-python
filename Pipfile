@@ -8,6 +8,7 @@ jupyter = "*"
 click = "*"
 pandas = "*"
 openpyxl = "*"
+matplotlib = "*"
 
 [dev-packages]
 black = "*"

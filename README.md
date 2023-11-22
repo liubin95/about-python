@@ -65,7 +65,7 @@ pipenv install --dev
 # 查看依赖
 pipenv graph
 # 生成requirements.txt
-pipenv requirements --dev --hash > requirements.txt
+pipenv requirements --dev --hash > requirements.bak.txt
 ```
 
 ### [pyenv](https://github.com/pyenv/pyenv)
