@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 jupyter = "*"
 click = "*"
+pandas = "*"
+openpyxl = "*"
 
 [dev-packages]
 black = "*"
