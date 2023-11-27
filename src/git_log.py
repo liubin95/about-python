@@ -81,8 +81,10 @@ for date_item in date_arr:
         result = result.stdout
         # 过滤掉Merge
         # 使用列表解析过滤要删除的元素
-        result = [x for x in result.splitlines() if not x.startswith("Merge")]
 
+        result = [x for x in result.splitlines() if not x.startswith("Merge")]
+        # 逆序
+        result.reverse()
         date_res.extend(result)
     if len(date_res) == 0:
         continue
